@@ -1,72 +1,48 @@
 <script setup lang="ts">
-import DemoPug from './components/DemoPug.vue'
+import { reactive, ref } from "vue";
+import { storeToRefs } from 'pinia'
+import  {useUserStore} from "@/store";
+import ComponentHeader from "./component/component-header.vue";
+
+const _useUserStore = useUserStore();
+const { user,  } = storeToRefs(_useUserStore)
+const {updateUser} = _useUserStore
+
+const count = ref(0)
+const data = reactive({
+  name: 'hello world',
+  age: 30,
+})
+const addCount = () => { 
+  count.value = count.value+1
+}
+
+const resetUser = ()=>{
+  _useUserStore.$reset()
+}
+</script>
+
+<script lang="ts">
+export default {
+  name: "AppIndex"
+}
 </script>
 
 <template lang="pug">
-DemoPug
-</template>
+div()
+  span() {{ count  }}
+  button(@click="addCount") addCount
+  hr
+  span() {{ data.name }}
+  span() {{ data.age }}
+  hr
+  ComponentHeader()
+  hr
+  span() {{ user }}
+  button(@click="()=>{updateUser()}") 更新user
+  button(@click="resetUser") 重置user
   
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
+</template>
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-}
-</style>
+<style scoped></style>
